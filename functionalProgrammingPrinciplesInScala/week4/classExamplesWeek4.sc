@@ -55,7 +55,7 @@ val s = new Succ(Zero) + t
 /*
  * Lecture 4.2 and 4.4
  */
-
+/*
 trait List[+T] {
   def isEmpty: Boolean
   def head: T
@@ -86,7 +86,7 @@ List(2,3)
 object test {
   val x: List[String] = Nil
 }
-
+*/
 /*
  * Lecture 4.5
  */
@@ -189,3 +189,19 @@ show(Prod(Number(5), Number(4)))
 show(Sum(Prod(Number(2), Var("x")), Var("y")))
 show(Prod(Sum(Number(2), Var("x")), Var("y")))
 show(Prod(Sum(Number(2), Var("x")), Sum(Var("y"), Number(3))))
+
+/*
+ * Lecture 4.7
+ */
+
+def isort(xs: List[Int]): List[Int] = xs match {
+  case List() => List()
+  case y :: ys => insert(y, isort(ys))
+}
+
+def insert(x: Int, xs: List[Int]): List[Int] = xs match {
+  case List() => List(x)
+  case y :: ys => if (x <= y) x :: xs else y :: insert(x, ys)
+}
+
+isort(List(24,12,56,34,345,76))
