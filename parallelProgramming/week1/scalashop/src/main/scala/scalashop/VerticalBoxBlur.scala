@@ -57,7 +57,7 @@ object VerticalBoxBlur {
    */
   def parBlur(src: Img, dst: Img, numTasks: Int, radius: Int): Unit = {
     // Divide tasks into number of columns per task
-    val numColumnsPerTask = src.width / numTasks
+    val numColumnsPerTask = Math.max(src.width / numTasks, 1)
 
     // Create tasks
     val tasks = (for {
