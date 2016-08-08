@@ -61,7 +61,7 @@ object HorizontalBoxBlur {
     // Create tasks
     val tasks = for {
       from <- 0 until src.height by numRowsPerTask
-      end <- numRowsPerTask to src.height by numRowsPerTask
+      end = Math.min(from + numRowsPerTask, src.height - 1)
     } yield task{ blur(src, dst, from, end, radius) }
 
     // Run tasks

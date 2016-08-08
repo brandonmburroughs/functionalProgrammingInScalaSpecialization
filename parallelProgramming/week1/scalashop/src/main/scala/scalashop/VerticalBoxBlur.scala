@@ -62,7 +62,7 @@ object VerticalBoxBlur {
     // Create tasks
     val tasks = for {
       from <- 0 until src.width by numColumnsPerTask
-      end <- numColumnsPerTask to src.width by numColumnsPerTask
+      end = Math.min(from + numColumnsPerTask, src.width - 1)
     } yield task{ blur(src, dst, from, end, radius) }
 
     // Run tasks
