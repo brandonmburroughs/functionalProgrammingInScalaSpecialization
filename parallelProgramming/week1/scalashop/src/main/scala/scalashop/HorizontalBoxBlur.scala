@@ -44,7 +44,7 @@ object HorizontalBoxBlur {
   def blur(src: Img, dst: Img, from: Int, end: Int, radius: Int): Unit = {
     // Iterate over all "strips" of pixels
     for (x <- 0 until src.width; y <- from until end) {
-      dst(x, y) = boxBlurKernel(src, x, y, radius)
+      dst.update(x, y, boxBlurKernel(src, x, y, radius))
     }
   }
 
