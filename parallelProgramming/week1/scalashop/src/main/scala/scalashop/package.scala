@@ -41,19 +41,21 @@ package object scalashop {
   def boxBlurKernel(src: Img, x: Int, y: Int, radius: Int): RGBA = {
     if (radius == 0) src(x,y)
     else {
-      // Get surrounding pixels, limited by picture height and width
-      val pixels = (for {
-        r <- 0 to radius
-        newX <- (x - r) to (x + r)
-        newY <- (y - r) to (y + r)
-      } yield src(clamp(newX, 0, src.width - 1), clamp(newY, 0, src.height - 1))).toList.distinct
+      // Initialize values
+      var count = 0
+      var (r, g, b, a) = (0, 0, 0, 0)
 
       // Get average pixel values
-      val r = pixels.map(pixel => red(pixel)).foldLeft(0)((b, a) => a + b)
-      val g = pixels.map(pixel => green(pixel)).foldLeft(0)((b, a) => a + b)
-      val b = pixels.map(pixel => blue(pixel)).foldLeft(0)((b, a) => a + b)
-      val a = pixels.map(pixel => alpha(pixel)).foldLeft(0)((b, a) => a + b)
-      val count = pixels.size
+      for {
+        newX <- clamp(x - radius, 0, src.width - 1) to clamp(x + radius, 0, src.width - 1)
+        newY <- clamp(y - radius, 0, src.height - 1) to clamp(y + radius, 0, src.height - 1)
+      } {
+        r += red(src(newX, newY))
+        g += green(src(newX, newY))
+        b += blue(src(newX, newY))
+        a += alpha(src(newX, newY))
+        count += 1
+      }
 
       // Return concurrent tasks in rgba
       rgba(r / count, g / count, b / count, a / count)
