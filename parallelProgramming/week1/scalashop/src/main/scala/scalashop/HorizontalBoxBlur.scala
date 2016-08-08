@@ -59,13 +59,13 @@ object HorizontalBoxBlur {
     val numRowsPerTask = Math.max(src.height / numTasks, 1)
 
     // Create tasks
-    val tasks = (for {
+    val tasks = for {
       from <- 0 until src.height by numRowsPerTask
       end <- numRowsPerTask to src.height by numRowsPerTask
-    } yield task(blur(src, dst, from, end, radius))).toList
+    } yield task{ blur(src, dst, from, end, radius) }
 
     // Run tasks
-    for (task <- tasks) task.join
+    tasks foreach {task => task.join}
   }
 
 }
